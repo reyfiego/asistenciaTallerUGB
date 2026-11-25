@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: operacion-carnada-ugb
+    name: portal-eventos-ugb
     runtime: node
     plan: free
     buildCommand: npm install && npm run build
