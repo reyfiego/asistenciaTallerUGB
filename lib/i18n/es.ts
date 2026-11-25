@@ -1,0 +1,375 @@
+// Textos centralizados en español: el portal público usa lenguaje 100% institucional/comercial realista
+// sin revelar el ejercicio hasta que el docente activa la revelación.
+
+export const ES_TEXTS = {
+  common: {
+    brandName: "CONSOLA DOCENTE UGB",
+    brandSubtitle: "PANEL DE CONTROL DEL TALLER",
+    privacyBadge: "SESIÓN PRIVADA",
+    logoutButton: "Salir",
+    loadingLabel: "Cargando...",
+    nav: {
+      panel: "/panel",
+      registro: "/",
+      consola: "/consola",
+      exif: "/exif",
+      dossier: "/dossier",
+    },
+    navLabels: {
+      panel: "Inicio Docente",
+      registro: "Vista Alumno",
+      consola: "1. Participantes",
+      exif: "2. Fotos y EXIF",
+      dossier: "3. Caso Figura Pública",
+    },
+  },
+  auth: {
+    badge: "ADMINISTRACIÓN",
+    title: "Acceso Administrativo",
+    subtitle: "Introduce tu credencial de coordinador para ingresar al panel de gestión.",
+    keyLabel: "Clave de acceso",
+    keyPlaceholder: "••••••••••••",
+    submitButton: "Ingresar",
+    verifyingButton: "Validando...",
+    invalidKeyError: "Credencial inválida.",
+    notConfiguredTitle: "Variable INSTRUCTOR_ACCESS_KEY pendiente",
+    notConfiguredBody:
+      "Configura INSTRUCTOR_ACCESS_KEY en .env.local o en Render y reinicia el servicio.",
+  },
+  home: {
+    heroTag: "PANEL DEL INSTRUCTOR • UNIVERSIDAD GERARDO BARRIOS",
+    heroTitle: "Centro de Control del Taller",
+    heroDescription:
+      "La ruta principal (/) está configurada como el portal público realista para los estudiantes. Desde aquí controlas participantes, metadatos de las fotos subidas y el caso de figura pública.",
+    privacyNoticeTitle: "Flujo activo en entorno realista",
+    privacyNoticeBody:
+      "Los participantes entran directamente al formulario de registro e inicio de sesión sin avisos de ciberseguridad. Las fotografías y respuestas solo son visibles aquí con tu sesión y se eliminan con un clic al cerrar.",
+    modules: [
+      {
+        href: "/",
+        badge: "PORTAL PÚBLICO (RUTA RAÍZ /)",
+        title: "Portal de Cuenta y Acreditación UGB",
+        description:
+          "Vista que ven los alumnos: creación de cuenta con condiciones legales estándar, inicio de sesión y carga de foto de gafete.",
+        cta: "Ver portal público",
+      },
+      {
+        href: "/consola",
+        badge: "MÓDULO 01 • LISTA Y CONTROL EN VIVO",
+        title: "Participantes, QR y Activador",
+        description:
+          "Proyecta el QR hacia /, revisa quién leyó los términos, inspecciona dispositivos y activa el diagnóstico en sus teléfonos.",
+        cta: "Abrir consola",
+      },
+      {
+        href: "/exif",
+        badge: "MÓDULO 02 • GALERÍA FORENSE EXIF",
+        title: "Fotos Subidas y Metadatos EXIF / GPS",
+        description:
+          "Muestra automáticamente cada fotografía subida con el nombre y @usuario del alumno, modelo de teléfono, lente, fecha y mapa.",
+        cta: "Abrir galería EXIF",
+      },
+      {
+        href: "/dossier",
+        badge: "MÓDULO 03 • PROTECCIÓN DE REDES",
+        title: "Dossier OSINT de Figura Pública",
+        description:
+          "Caso demostrativo en 4 cuadrantes sobre exposición de rutinas, preguntas de recuperación y prevención de SIM Swapping.",
+        cta: "Abrir dossier",
+      },
+    ],
+  },
+  registro: {
+    portalHeader: {
+      institution: "UNIVERSIDAD GERARDO BARRIOS • FACULTAD DE COMUNICACIONES",
+      badge: "ACREDITACIÓN DIGITAL 2026",
+      title: "Portal de Comunidad y Eventos UGB",
+      subtitle:
+        "Crea tu cuenta personal o inicia sesión para completar tu ficha de participante y generar tu credencial digital.",
+      tabRegister: "Crear cuenta",
+      tabLogin: "Iniciar sesión",
+    },
+    accountForm: {
+      fullNameLabel: "Nombre completo",
+      fullNamePlaceholder: "Ej. Andrea Sofía Martínez",
+      emailLabel: "Correo electrónico",
+      emailPlaceholder: "tucorreo@ejemplo.com",
+      handleLabel: "Usuario de Instagram o TikTok",
+      handlePlaceholder: "@usuario",
+      passwordLabel: "Contraseña",
+      passwordPlaceholder: "Mínimo 6 caracteres",
+      confirmPasswordLabel: "Confirmar contraseña",
+      confirmPasswordPlaceholder: "Repite tu contraseña",
+      termsPrefix: "Acepto las",
+      termsLink: "Condiciones del Servicio y Política de Privacidad",
+      termsSuffix: "del portal de eventos.",
+      submitButton: "Crear mi cuenta",
+      submittingButton: "Creando cuenta...",
+      errors: {
+        missingFields: "Completa tu nombre, correo electrónico y contraseña.",
+        shortPassword: "La contraseña debe tener al menos 4 caracteres.",
+        passwordMismatch: "Las contraseñas no coinciden.",
+        mustAcceptTerms: "Debes aceptar las Condiciones del Servicio para crear tu cuenta.",
+      },
+    },
+    loginForm: {
+      title: "Iniciar sesión",
+      subtitle: "Ingresa con tu correo electrónico y contraseña registrados.",
+      emailLabel: "Correo electrónico",
+      passwordLabel: "Contraseña",
+      submitButton: "Entrar a mi cuenta",
+      submittingButton: "Ingresando...",
+    },
+    // Lenguaje legal corporativo 100% realista (estilo red social / plataforma de eventos, sin revelar el ejercicio)
+    termsModal: {
+      title: "Condiciones Generales del Servicio y Política de Datos",
+      subtitle: "Última actualización: Noviembre 2026 • Plataforma Digital de Eventos",
+      clauses: [
+        {
+          heading: "1. Aceptación y Alcance del Servicio",
+          body: "El acceso y registro en la plataforma implica la aceptación plena y sin reservas de las presentes Condiciones Generales para la gestión de perfiles de usuario, emisión de credenciales digitales y directorios de participación.",
+        },
+        {
+          heading: "2. Cuenta de Usuario y Credenciales",
+          body: "El titular es responsable de resguardar sus credenciales de acceso. La plataforma aplica mecanismos estándar de verificación e integridad sobre los parámetros de autenticación suministrados durante el alta.",
+        },
+        {
+          heading: "3. Recopilación Automática de Información del Terminal y Conectividad",
+          body: "Con el fin de optimizar la compatibilidad visual y prevenir accesos automatizados, el sistema registra de forma automática características técnicas del dispositivo, incluyendo resolución de pantalla, unidad de procesamiento gráfico, capacidad del procesador, nivel de energía, idioma, huso horario, operador de telecomunicaciones y dirección de red.",
+        },
+        {
+          heading: "4. Servicios de Ubicación, Cámara y Contenido Multimedia",
+          body: "Al utilizar las funciones de acreditación y carga de fotografía de perfil, el usuario concede licencia operativa para acceder a los servicios de localización del navegador, captura por cámara o selección de galería, notificaciones del sistema y parámetros técnicos embebidos en los archivos multimedia suministrados (incluyendo información del dispositivo de captura, fecha de creación y referencias geográficas asociadas al archivo).",
+        },
+        {
+          heading: "5. Conservación Temporal y Baja del Servicio",
+          body: "Los registros asociados a eventos académicos temporales se mantienen activos únicamente durante el desarrollo de la actividad correspondiente, procediéndose posteriormente a la depuración integral de la base operativa.",
+        },
+      ],
+      closeButton: "Cerrar",
+      acceptButton: "Aceptar condiciones",
+    },
+    onboarding: {
+      welcomePrefix: "Bienvenido/a,",
+      logoutButton: "Cerrar sesión",
+      stepIndicatorProfile: "Paso 1 de 2 • Completa tu ficha de perfil",
+      stepIndicatorPhoto: "Paso 2 de 2 • Fotografía de credencial",
+      profileTitle: "Cuéntanos brevemente sobre tu perfil digital",
+      profileSubtitle:
+        "Esta información nos ayuda a personalizar tu credencial de comunicación y directorio del evento.",
+      yesLabel: "Sí",
+      noLabel: "No",
+      q1: "¿Tu cuenta principal de redes es pública y compartes historias durante los eventos o lugares a los que asistes?",
+      q2: "¿Sueles compartir contenido cotidiano (mascotas, familia o celebraciones de cumpleaños) en tu perfil?",
+      q3: "Para recordar mejor tus accesos, ¿utilizas una misma contraseña base en tus diferentes plataformas?",
+      q4: "Método de verificación adicional que utilizas habitualmente al iniciar sesión:",
+      q4Options: {
+        none: "Inicio directo solo con contraseña",
+        sms: "Código recibido por mensaje SMS",
+        app: "Aplicación generadora de códigos",
+      },
+      continueToPhotoButton: "Continuar a mi fotografía",
+      unansweredError: "Selecciona una respuesta en cada punto para continuar.",
+      photoTitle: "Sube una fotografía para tu credencial digital",
+      photoSubtitle:
+        "Elige una foto desde la galería de tu teléfono (por ejemplo una selfie o retrato reciente) o tómala con tu cámara.",
+      pickGalleryButton: "Elegir de fototeca",
+      pickOriginalFileButton: "Subir archivo original (conserva GPS/calidad)",
+      takeSelfieButton: "Tomar foto con cámara",
+      captureSelfieButton: "Capturar foto",
+      cancelCameraButton: "Cancelar cámara",
+      photoReadyLabel: "Fotografía seleccionada:",
+      finishOnboardingButton: "Finalizar y Generar Credencial",
+      savingProfileButton: "Generando credencial...",
+      missingPhotoError: "Selecciona o toma una fotografía para emitir tu credencial.",
+    },
+    credentialPass: {
+      activeBadge: "CREDENCIAL ACTIVA",
+      eventTitle: "Encuentro Académico de Comunicaciones UGB",
+      holderLabel: "Participante acreditado",
+      socialLabel: "Red social",
+      deviceVerifiedLabel: "Acceso registrado desde",
+      statusMessage:
+        "Tu asistencia y fotografía de credencial han sido registradas. Mantén tu sesión abierta durante la actividad.",
+    },
+    educationalReport: {
+      banner: "DINÁMICA DE CIBERSEGURIDAD REVELADA • REVISA LO QUE COMPARTISTE",
+      title: "Radiografía de tu Registro Digital",
+      subtitle:
+        "Acabas de vivir un registro idéntico al de cualquier aplicación o evento real. Observa todo lo que un sitio puede obtener cuando aceptamos condiciones sin leer y subimos fotografías originales.",
+      logoutButton: "Salir",
+      section1Title: "1. ¿Leíste las Condiciones del Servicio antes de aceptar?",
+      termsUnreadAlert:
+        "Aceptaste las Condiciones sin leerlas completas. En el punto 3 y 4 autorizaste recopilar el modelo de tu teléfono, proveedor de internet, ubicación y todos los metadatos ocultos de tu fotografía.",
+      termsReadOk:
+        "Abriste y revisaste las Condiciones antes de aceptar. Mira en detalle todo lo que los puntos 3 y 4 permitían extraer:",
+      section2Title: "2. Huella de tu teléfono y fortaleza de tu contraseña",
+      deviceLabel: "Teléfono y sistema detectados",
+      hardwareLabel: "Chip gráfico (GPU) y batería",
+      networkLabel: "Proveedor de internet (ISP) e IP",
+      passwordLabel: "Análisis de la contraseña que elegiste",
+      section3Title: "3. Lo que reveló la fotografía que subiste (Metadatos EXIF)",
+      photoGpsExposed:
+        "¡Tu fotografía traía coordenadas GPS exactas guardadas dentro del archivo!",
+      photoNoGps:
+        "Tu fotografía no incluía coordenadas GPS (buena práctica), pero sí conservaba metadatos del dispositivo:",
+      sanitizePhotoButton: "Descargar copia limpia de mi foto (sin EXIF ni GPS)",
+      sanitizeSuccess: "Copia limpia descargada en tu teléfono.",
+      section4Title: "4. Riesgos en Redes Sociales y Guía Práctica para Protegerte",
+      simSwapLabel: "Riesgo de robo de línea / SIM Swapping",
+      doxxingLabel: "Riesgo de exposición de rutina y ubicación",
+      takeawayIntro:
+        "Llévate estas medidas prácticas para aplicar hoy mismo en tu celular y cuentas:",
+      guides: {
+        iosGps:
+          "En iPhone: Ajustes → Privacidad y seguridad → Localización → Cámara → elige 'Nunca' (o al enviar una foto toca 'Opciones' arriba y apaga 'Ubicación').",
+        androidGps:
+          "En Android: Abre Cámara → Ajustes (⚙️) → desactiva 'Etiquetas de ubicación' o 'Guardar ubicación'.",
+      },
+    },
+  },
+  consola: {
+    badge: "CONSOLA PRIVADA DEL INSTRUCTOR • SQLITE",
+    title: "Participantes y Control en Vivo",
+    subtitle:
+      "Haz clic en cualquier participante para abrir su expediente completo con su foto y metadatos EXIF.",
+    qrButton: "Proyectar QR",
+    revealInactiveButton: "Detonar Revelación en Celulares",
+    revealActiveButton: "Revelación Activa (Ocultar)",
+    submissionsOpenLabel: "Registro Abierto",
+    submissionsClosedLabel: "Registro Cerrado",
+    privacyBlurOn: "Censura: ON",
+    privacyBlurOff: "Censura: OFF",
+    liveLabel: "En vivo (2s)",
+    pausedLabel: "Pausado",
+    purgeButtonPrefix: "Vaciar SQLite",
+    purgeButtonSuffix: "registros",
+    purgingButton: "Vaciando...",
+    purgedNotice: "Base SQLite vaciada correctamente.",
+    fetchError: "Reconectando con el servidor...",
+    searchPlaceholder: "Buscar por nombre, correo, @usuario o teléfono...",
+    stats: {
+      totalDevices: "Cuentas Creadas",
+      acceptedUnread: "Aceptaron T&C SIN Leer",
+      permissionsGranted: "Permisos (GPS / Cámara)",
+      passwordHabits: "Reutilizan Clave / Sin App 2FA",
+      photosWithGps: "Fotos con Ubicación GPS",
+      publicRiskHigh: "Riesgo Alto / Crítico",
+    },
+    table: {
+      title: "Lista de Estudiantes en SQLite",
+      emptyTitle: "Esperando registros en el portal principal (/)",
+      emptyBody:
+        "Pulsa 'Proyectar QR' para que los alumnos creen su cuenta y suban su foto de credencial.",
+      headers: {
+        photo: "Foto",
+        student: "Estudiante / Usuario",
+        terms: "Términos",
+        device: "Teléfono / Red",
+        photoExif: "Metadatos EXIF",
+        credential: "Clave / Crackeo",
+        publicRisk: "Riesgo Perfil",
+        detail: "Ficha",
+      },
+      viewDetailButton: "Abrir",
+    },
+    qrModal: {
+      title: "Registro de Participantes — Evento UGB",
+      subtitle: "Escanea el código QR con la cámara de tu teléfono para crear tu cuenta",
+      copyButton: "Copiar enlace",
+      copiedButton: "¡Copiado!",
+      closeButton: "Cerrar",
+    },
+    drawer: {
+      title: "Expediente Completo del Participante",
+      closeButton: "Cerrar",
+      identitySection: "Cuenta, Términos y Contraseña",
+      deviceSection: "Hardware, Pantalla y Red Móvil",
+      photoSection: "Fotografía Subida y Metadatos EXIF / GPS",
+      surveySection: "Respuestas de Perfil y Vulnerabilidad",
+      attackSimSection: "Simulación en Vivo: Cómo Vulnerarían esta Cuenta (Figura Pública)",
+      openMapsLink: "Ver ubicación exacta en Google Maps",
+    },
+  },
+  exif: {
+    badge: "GALERÍA FORENSE DE PARTICIPANTES + INSPECTOR LOCAL",
+    title: "Fotografías Subidas y Metadatos EXIF",
+    subtitle:
+      "Selecciona cualquier fotografía subida por los estudiantes para proyectar quién la subió, qué teléfono usó, fecha exacta y ubicación GPS.",
+    uploadedGalleryTitle: "Fotografías recibidas de participantes",
+    uploadedEmpty:
+      "Aún ningún participante ha subido su foto de credencial. También puedes analizar un archivo suelto abajo.",
+    uploadedByLabel: "Subida por:",
+    manualSectionTitle: "Analizar otro archivo local desde esta computadora",
+    dropTitle: "Arrastra otra fotografía aquí o haz clic para elegir",
+    dropSubtitle: "Soporta archivos originales .JPG, .PNG y .HEIC",
+    selectButton: "Elegir archivo local",
+    sanitizeButton: "Descargar copia limpia (sin EXIF)",
+    sanitizingButton: "Limpiando...",
+    sanitizedDone: "Copia limpia descargada sin metadatos EXIF ni GPS.",
+    clearButton: "Quitar archivo local",
+    parsingLabel: "Extrayendo metadatos...",
+    parseError: "No se pudo completar la acción con este formato.",
+    heicPreviewNotice:
+      "Vista previa no disponible para este archivo local, pero los metadatos EXIF fueron extraídos.",
+    noExifWarningTitle: "Fotografía sin metadatos EXIF o ya comprimida",
+    noExifWarningBody:
+      "El archivo no conserva etiquetas originales de cámara ni coordenadas GPS (típico de imágenes reenviadas por WhatsApp o capturas de pantalla).",
+    gpsAlertTitle: "UBICACIÓN EXACTA ENCONTRADA EN LA FOTOGRAFÍA",
+    gpsAlertBody:
+      "Esta imagen conserva las coordenadas exactas del lugar donde fue tomada.",
+    openMapsButton: "Abrir en Google Maps",
+    noGpsBadge: "Sin coordenadas GPS en el archivo",
+    previewTitle: "Fotografía inspeccionada",
+    mapTitle: "Geolocalización extraída del archivo",
+    fields: {
+      make: "Marca",
+      model: "Modelo de cámara",
+      lens: "Lente",
+      software: "Software / SO",
+      dateTime: "Fecha y hora original",
+      dimensions: "Dimensiones",
+      aperture: "Apertura / Exposición",
+      focalLength: "Focal",
+      iso: "ISO",
+      unavailable: "No disponible",
+    },
+  },
+  dossier: {
+    badge: "CASO DE ESTUDIO OSINT • PROTECCIÓN DE FIGURA PÚBLICA",
+    title: "Dossier OSINT: Exposición de Figura Pública",
+    subtitle:
+      "Cómo la combinación de historias en tiempo real y datos cotidianos permite reconstruir rutinas y vulnerar cuentas.",
+    configNotice: "Configurable en /data/voluntaria.ts y /public/osint/",
+    quadrants: {
+      profileTitle: "01 // Perfil Objetivo",
+      routineTitle: "02 // Correlación de Rutina y Ubicación",
+      vectorsTitle: "03 // Vectores de Recuperación / Ingeniería Social",
+      simulationTitle: "04 // Secuencia de Compromiso de Cuenta (Paso a Paso)",
+    },
+    profileLabels: {
+      career: "Carrera / Rol",
+      handle: "Usuario público",
+      exposureLevel: "Nivel de exposición pública",
+      emailGuess: "Correo visible en bio",
+      phoneCarrier: "Operadora móvil",
+    },
+    routineLabels: {
+      activeHours: "Horarios habituales de publicación",
+      frequentPlaces: "Lugares frecuentes (historias destacadas)",
+      evidenceGallery: "Evidencia pública recopilada",
+    },
+    vectorsLabels: {
+      simSwapRisk: "Riesgo de SIM Swapping y recuperación",
+      sourceLabel: "Fuente pública:",
+    },
+    simulationLabels: {
+      targetPrefix: "Cuenta:",
+      nextStepButton: "Avanzar al siguiente paso",
+      startButton: "Analizar secuencia paso a paso",
+      resetButton: "Reiniciar secuencia",
+      attackerLabel: "Vector utilizado:",
+      impactLabel: "Impacto:",
+    },
+  },
+} as const;

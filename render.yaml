@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: operacion-carnada-ugb
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    healthCheckPath: /api/taller
+    envVars:
+      - key: NODE_VERSION
+        value: 22.14.0
+      - key: INSTRUCTOR_ACCESS_KEY
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true

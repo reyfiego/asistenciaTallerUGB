@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" fill="none">
+  <rect width="600" height="360" rx="20" fill="#09111f"/>
+  <rect x="14" y="14" width="572" height="332" rx="14" stroke="#f43f5e" stroke-opacity="0.45" stroke-width="2"/>
+  <rect x="80" y="72" width="440" height="64" rx="12" fill="#0f172a" stroke="#334155"/>
+  <text x="104" y="100" fill="#f43f5e" font-family="monospace" font-size="14" font-weight="bold">COMENTARIO PÚBLICO DETECTADO:</text>
+  <text x="104" y="122" fill="#e2e8f0" font-family="monospace" font-size="13">"Feliz cumple #22! Un abrazo de tu tía y de Maxi 🐶"</text>
+  <text x="300" y="224" text-anchor="middle" fill="#fda4af" font-family="monospace" font-size="19" font-weight="bold">EVIDENCIA OSINT 03: VÍNCULOS FAMILIARES</text>
+  <text x="300" y="256" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="14">Respuestas a preguntas de seguridad expuestas</text>
+</svg>
