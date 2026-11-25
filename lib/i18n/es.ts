@@ -173,8 +173,7 @@ export const ES_TEXTS = {
       photoTitle: "Sube una fotografía para tu credencial digital",
       photoSubtitle:
         "Elige una foto desde la galería de tu teléfono (por ejemplo una selfie o retrato reciente) o tómala con tu cámara.",
-      pickGalleryButton: "Elegir de fototeca",
-      pickOriginalFileButton: "Subir archivo original (conserva GPS/calidad)",
+      pickGalleryButton: "Elegir foto de galería",
       takeSelfieButton: "Tomar foto con cámara",
       captureSelfieButton: "Capturar foto",
       cancelCameraButton: "Cancelar cámara",

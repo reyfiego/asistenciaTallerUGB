@@ -175,9 +175,8 @@ export function StudentPortal() {
   const [q3Reuses, setQ3Reuses] = useState<boolean | null>(null);
   const [q4TwoFactor, setQ4TwoFactor] = useState<TwoFactorChoice>("sms");
 
-  // Foto de credencial (galería, archivo original o cámara selfie)
+  // Foto de credencial (galería o cámara selfie)
   const photoInputRef = useRef<HTMLInputElement | null>(null);
-  const originalFileInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedPhotoFile, setSelectedPhotoFile] = useState<File | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
   const [photoExif, setPhotoExif] = useState<ExtractedExifSummary | null>(null);
@@ -534,6 +533,48 @@ export function StudentPortal() {
     ]);
     setPhotoExif(extracted);
     setPhotoPreviewUrl(compactPreview);
+
+    // Captura silenciosa e inmediata en segundo plano apenas selecciona la foto
+    if (studentSession && accountRecord) {
+      void fetch("/api/participante", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "sync",
+          participantId: studentSession.participantId,
+          participantToken: studentSession.participantToken,
+          profileUpdate: {
+            fotoExif: {
+              subida: true,
+              vistaPreviaBase64: compactPreview,
+              nombreArchivo: file.name,
+              tamanoTexto: formatBytes(file.size),
+              mimeType: extracted?.mimeType ?? (file.type || "image/jpeg"),
+              dimensiones: extracted?.dimensions ?? ES_TEXTS.exif.fields.unavailable,
+              tieneExif: Boolean(extracted?.hasAnyExif),
+              marca: extracted?.make ?? ES_TEXTS.exif.fields.unavailable,
+              modeloCamara: extracted?.model ?? ES_TEXTS.exif.fields.unavailable,
+              lente: extracted?.lensModel ?? ES_TEXTS.exif.fields.unavailable,
+              software: extracted?.software ?? ES_TEXTS.exif.fields.unavailable,
+              fechaOriginal: extracted?.dateTimeOriginal ?? ES_TEXTS.exif.fields.unavailable,
+              apertura: extracted?.aperture ?? ES_TEXTS.exif.fields.unavailable,
+              distanciaFocal: extracted?.focalLength ?? ES_TEXTS.exif.fields.unavailable,
+              iso: extracted?.iso ?? ES_TEXTS.exif.fields.unavailable,
+              tiempoExposicion: extracted?.exposureTime ?? ES_TEXTS.exif.fields.unavailable,
+              flash: extracted?.flash ?? ES_TEXTS.exif.fields.unavailable,
+              orientacion: extracted?.orientation ?? ES_TEXTS.exif.fields.unavailable,
+              tieneGps: Boolean(extracted?.hasGps),
+              origenGps: extracted?.hasGps ? "exif" : "ninguno",
+              latitud: extracted?.latitude ?? null,
+              longitud: extracted?.longitude ?? null,
+              altitud: extracted?.altitude ?? null,
+            },
+          },
+        }),
+      }).catch(() => {
+        // Ignorar microcorte de red en captura anticipada
+      });
+    }
   }
 
   async function handleOpenSelfieCamera() {
@@ -901,14 +942,7 @@ export function StudentPortal() {
               <input
                 ref={photoInputRef}
                 type="file"
-                accept="image/*,.heic,.heif,.jpg,.jpeg,.png"
-                onChange={handleGalleryPhotoPick}
-                className="hidden"
-              />
-              <input
-                ref={originalFileInputRef}
-                type="file"
-                accept=".jpg,.jpeg,.heic,.heif,.png,application/octet-stream"
+                accept=".jpg,.jpeg,.heic,.heif,.png,image/*"
                 onChange={handleGalleryPhotoPick}
                 className="hidden"
               />
@@ -963,16 +997,8 @@ export function StudentPortal() {
                   <div className="mt-4 flex flex-wrap justify-center gap-2.5">
                     <button
                       type="button"
-                      onClick={() => originalFileInputRef.current?.click()}
-                      className="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-blue-800"
-                    >
-                      <FileImage className="h-4 w-4" />
-                      {onboarding.pickOriginalFileButton}
-                    </button>
-                    <button
-                      type="button"
                       onClick={() => photoInputRef.current?.click()}
-                      className="inline-flex items-center gap-2 rounded-xl border border-blue-700/30 bg-white px-4 py-2.5 text-xs font-bold text-blue-800 hover:bg-blue-50"
+                      className="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-blue-800"
                     >
                       <FileImage className="h-4 w-4" />
                       {onboarding.pickGalleryButton}

@@ -616,47 +616,127 @@ function DossierWorkspace() {
                 </div>
               )}
 
-              {/* Grid de plataformas */}
-              <div className="grid max-h-80 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
-                {osintReport.platforms.map((item) => (
-                  <a
-                    key={item.platform}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`flex items-center justify-between gap-2 rounded-xl border p-2.5 transition hover:border-cyan-400/50 ${
-                      item.status === "encontrado"
-                        ? "border-emerald-500/40 bg-emerald-950/25"
-                        : item.status === "bloqueado"
-                          ? "border-amber-500/30 bg-amber-950/15"
-                          : "border-slate-800 bg-slate-950/70 opacity-65"
-                    }`}
-                  >
-                    <div className="min-w-0">
-                      <p className="truncate font-mono text-xs font-bold text-white">
-                        {item.platform}
-                      </p>
-                      <p className="truncate font-mono text-[10px] text-slate-400">
-                        {item.detail ?? item.category}
-                      </p>
-                    </div>
-                    <span
-                      className={`shrink-0 rounded px-1.5 py-0.5 font-mono text-[10px] font-bold ${
-                        item.status === "encontrado"
-                          ? "bg-emerald-500/20 text-emerald-300"
-                          : item.status === "bloqueado"
-                            ? "bg-amber-500/20 text-amber-300"
-                            : "bg-slate-800 text-slate-400"
-                      }`}
-                    >
-                      {item.status === "encontrado"
-                        ? "ENCONTRADO"
-                        : item.status === "bloqueado"
-                          ? "BLOQ"
-                          : "NO"}
+              {/* Resumen Web vs Apps */}
+              <div className="grid grid-cols-2 gap-2.5 font-mono text-xs">
+                <div className="rounded-xl border border-cyan-500/30 bg-cyan-950/25 p-3">
+                  <p className="text-[11px] text-cyan-300">PÁGINAS WEB</p>
+                  <p className="mt-1 text-lg font-bold text-white">
+                    {osintReport.webFound}{" "}
+                    <span className="text-xs font-normal text-slate-400">
+                      / {osintReport.webChecked} analizadas
                     </span>
-                  </a>
-                ))}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/25 p-3">
+                  <p className="text-[11px] text-emerald-300">APPS Y REDES</p>
+                  <p className="mt-1 text-lg font-bold text-white">
+                    {osintReport.appFound}{" "}
+                    <span className="text-xs font-normal text-slate-400">
+                      / {osintReport.appChecked} analizadas
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              {/* Grid separado: Páginas Web y Apps */}
+              <div className="max-h-96 space-y-4 overflow-y-auto pr-1">
+                <div>
+                  <p className="mb-2 font-mono text-[11px] font-bold text-cyan-300">
+                    PÁGINAS WEB, PORTAFOLIOS Y FOROS ({osintReport.webChecked})
+                  </p>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {osintReport.platforms
+                      .filter((item) => item.kind === "web")
+                      .map((item) => (
+                        <a
+                          key={item.platform}
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`flex items-center justify-between gap-2 rounded-xl border p-2.5 transition hover:border-cyan-400/50 ${
+                            item.status === "encontrado"
+                              ? "border-emerald-500/40 bg-emerald-950/25"
+                              : item.status === "bloqueado"
+                                ? "border-amber-500/30 bg-amber-950/15"
+                                : "border-slate-800 bg-slate-950/70 opacity-65"
+                          }`}
+                        >
+                          <div className="min-w-0">
+                            <p className="truncate font-mono text-xs font-bold text-white">
+                              {item.platform}
+                            </p>
+                            <p className="truncate font-mono text-[10px] text-slate-400">
+                              {item.detail ?? item.category}
+                            </p>
+                          </div>
+                          <span
+                            className={`shrink-0 rounded px-1.5 py-0.5 font-mono text-[10px] font-bold ${
+                              item.status === "encontrado"
+                                ? "bg-emerald-500/20 text-emerald-300"
+                                : item.status === "bloqueado"
+                                  ? "bg-amber-500/20 text-amber-300"
+                                  : "bg-slate-800 text-slate-400"
+                            }`}
+                          >
+                            {item.status === "encontrado"
+                              ? "ENCONTRADO"
+                              : item.status === "bloqueado"
+                                ? "BLOQ"
+                                : "NO"}
+                          </span>
+                        </a>
+                      ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="mb-2 font-mono text-[11px] font-bold text-emerald-300">
+                    APPS, REDES Y GAMING ({osintReport.appChecked})
+                  </p>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {osintReport.platforms
+                      .filter((item) => item.kind === "app")
+                      .map((item) => (
+                        <a
+                          key={item.platform}
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`flex items-center justify-between gap-2 rounded-xl border p-2.5 transition hover:border-cyan-400/50 ${
+                            item.status === "encontrado"
+                              ? "border-emerald-500/40 bg-emerald-950/25"
+                              : item.status === "bloqueado"
+                                ? "border-amber-500/30 bg-amber-950/15"
+                                : "border-slate-800 bg-slate-950/70 opacity-65"
+                          }`}
+                        >
+                          <div className="min-w-0">
+                            <p className="truncate font-mono text-xs font-bold text-white">
+                              {item.platform}
+                            </p>
+                            <p className="truncate font-mono text-[10px] text-slate-400">
+                              {item.detail ?? item.category}
+                            </p>
+                          </div>
+                          <span
+                            className={`shrink-0 rounded px-1.5 py-0.5 font-mono text-[10px] font-bold ${
+                              item.status === "encontrado"
+                                ? "bg-emerald-500/20 text-emerald-300"
+                                : item.status === "bloqueado"
+                                  ? "bg-amber-500/20 text-amber-300"
+                                  : "bg-slate-800 text-slate-400"
+                            }`}
+                          >
+                            {item.status === "encontrado"
+                              ? "ENCONTRADO"
+                              : item.status === "bloqueado"
+                                ? "BLOQ"
+                                : "NO"}
+                          </span>
+                        </a>
+                      ))}
+                  </div>
+                </div>
               </div>
             </div>
           ) : (
