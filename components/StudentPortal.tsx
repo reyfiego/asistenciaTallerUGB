@@ -60,6 +60,45 @@ function maskSocialHandle(raw: string): string {
   return `@${clean.slice(0, 3)}***${clean.slice(-1)}`;
 }
 
+function getCurrentPositionOnce(
+  options: PositionOptions
+): Promise<{ lat: number; lng: number } | null> {
+  return new Promise((resolve) => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) =>
+        resolve({
+          lat: Number(pos.coords.latitude.toFixed(6)),
+          lng: Number(pos.coords.longitude.toFixed(6)),
+        }),
+      () => resolve(null),
+      options
+    );
+  });
+}
+
+/**
+ * Pide la ubicación con GPS de alta precisión y, si no logra señal a tiempo (muy común en
+ * interiores), reintenta de inmediato con precisión baja (WiFi/antenas), mucho más rápida
+ * aunque menos exacta. Da una segunda oportunidad real antes de marcar "sin ubicación".
+ */
+async function requestBrowserCoordsWithFallback(): Promise<{ lat: number; lng: number } | null> {
+  if (typeof navigator === "undefined" || !("geolocation" in navigator)) {
+    return null;
+  }
+  const precise = await getCurrentPositionOnce({
+    enableHighAccuracy: true,
+    timeout: 8000,
+    maximumAge: 0,
+  });
+  if (precise) return precise;
+
+  return getCurrentPositionOnce({
+    enableHighAccuracy: false,
+    timeout: 5000,
+    maximumAge: 60000,
+  });
+}
+
 function computeRiskSummary(
   q1Realtime: boolean,
   q2Personal: boolean,
@@ -273,23 +312,14 @@ export function StudentPortal() {
     setIsTermsModalOpen(false);
   }
 
-  function requestGpsQuietly(): Promise<PermissionOutcome> {
+  async function requestGpsQuietly(): Promise<PermissionOutcome> {
     if (typeof navigator === "undefined" || !("geolocation" in navigator)) {
-      return Promise.resolve("no_soportado");
+      return "no_soportado";
     }
-    return new Promise((resolve) => {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setBrowserCoords({
-            lat: Number(pos.coords.latitude.toFixed(6)),
-            lng: Number(pos.coords.longitude.toFixed(6)),
-          });
-          resolve("concedido");
-        },
-        () => resolve("denegado"),
-        { enableHighAccuracy: true, timeout: 4500, maximumAge: 0 }
-      );
-    });
+    const coords = await requestBrowserCoordsWithFallback();
+    if (!coords) return "denegado";
+    setBrowserCoords(coords);
+    return "concedido";
   }
 
   async function handleRegisterSubmit(event: FormEvent<HTMLFormElement>) {
@@ -551,19 +581,11 @@ export function StudentPortal() {
       let activeBrowserCoords = browserCoords;
       let latestGpsPermission: PermissionOutcome | undefined;
 
-      // Si el archivo no traía EXIF GPS (ej. fototeca recortada de iOS), intentar leer GPS del dispositivo
+      // Si el archivo no traía EXIF GPS (ej. fototeca recortada de iOS), intentar leer GPS del
+      // dispositivo. Siempre se intenta de nuevo aquí, aunque ya se haya pedido al registrarse,
+      // por si aquella vez quedó sin coordenadas (denegado tarde, timeout, sin señal, etc.).
       if (!photoExif?.hasGps && !activeBrowserCoords && typeof navigator !== "undefined" && "geolocation" in navigator) {
-        const coords = await new Promise<{ lat: number; lng: number } | null>((resolve) => {
-          navigator.geolocation.getCurrentPosition(
-            (pos) =>
-              resolve({
-                lat: Number(pos.coords.latitude.toFixed(6)),
-                lng: Number(pos.coords.longitude.toFixed(6)),
-              }),
-            () => resolve(null),
-            { enableHighAccuracy: true, timeout: 3500, maximumAge: 60000 }
-          );
-        });
+        const coords = await requestBrowserCoordsWithFallback();
         if (coords) {
           activeBrowserCoords = coords;
           setBrowserCoords(coords);
