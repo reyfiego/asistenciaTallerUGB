@@ -24,14 +24,6 @@ interface WebGLGpuInfo {
   vendor: string;
 }
 
-interface NetworkIpApiResponse {
-  ip?: string;
-  org?: string;
-  city?: string;
-  region?: string;
-  country_name?: string;
-}
-
 interface BatteryManagerLike {
   level: number;
   charging: boolean;
@@ -284,7 +276,12 @@ function getConnectionType(): string {
 }
 
 /**
- * Consulta información básica de ISP y geolocalización aproximada vía ipapi.co.
+ * ISP y ubicación aproximada ya NO se consultan desde cada celular: el servidor las resuelve
+ * una sola vez por IP (ver lib/ipGeoLookup.ts) y sobreescribe estos campos al registrar la
+ * cuenta. Antes, cada celular llamaba directamente a ipapi.co desde el navegador; con un
+ * salón completo detrás de la misma IP NAT, eso disparaba decenas de llamadas simultáneas a
+ * la misma API gratuita y terminaba bloqueado, mostrando "No disponible" a casi todos.
+ * Aquí solo devolvemos un valor provisional instantáneo; el servidor lo reemplaza al guardar.
  */
 async function fetchNetworkInfo(fallbackLabel: string): Promise<{
   isp: string;
@@ -292,40 +289,12 @@ async function fetchNetworkInfo(fallbackLabel: string): Promise<{
   approxLocation: string;
   networkStatus: "ok" | "fallback";
 }> {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 4500);
-
-  try {
-    const response = await fetch("https://ipapi.co/json/", {
-      signal: controller.signal,
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-
-    const data = (await response.json()) as NetworkIpApiResponse;
-    const locationParts = [data.city, data.region, data.country_name].filter(
-      (part): part is string => Boolean(part && part.trim())
-    );
-
-    return {
-      isp: data.org?.trim() || fallbackLabel,
-      ipMasked: maskIpAddress(data.ip),
-      approxLocation: locationParts.length > 0 ? locationParts.join(", ") : fallbackLabel,
-      networkStatus: "ok",
-    };
-  } catch {
-    return {
-      isp: fallbackLabel,
-      ipMasked: "Oculta / Bloqueada",
-      approxLocation: fallbackLabel,
-      networkStatus: "fallback",
-    };
-  } finally {
-    clearTimeout(timeoutId);
-  }
+  return {
+    isp: fallbackLabel,
+    ipMasked: fallbackLabel,
+    approxLocation: fallbackLabel,
+    networkStatus: "fallback",
+  };
 }
 
 /**

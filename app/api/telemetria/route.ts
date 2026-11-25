@@ -5,6 +5,7 @@ import {
   verifyInstructorSessionToken,
 } from "@/lib/auth";
 import { checkRateLimit, extractClientIp } from "@/lib/rateLimit";
+import { resolveNetworkInfoForIp } from "@/lib/ipGeoLookup";
 import {
   clearTelemetryRecords,
   getTelemetrySnapshot,
@@ -67,6 +68,14 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    // ISP/ubicación se resuelven en el servidor (cacheado por IP) en vez de confiar en que
+    // cada celular llame directamente a la API externa: evita que el salón entero, detrás de
+    // la misma IP NAT, dispare decenas de llamadas simultáneas y termine bloqueado.
+    const networkInfo = await resolveNetworkInfoForIp(ip);
+    validated.record.isp = networkInfo.isp;
+    validated.record.ipParcial = networkInfo.ipMasked;
+    validated.record.ubicacionIp = networkInfo.approxLocation;
 
     const result = registerParticipantAccount(validated);
     if (!result.ok) {
