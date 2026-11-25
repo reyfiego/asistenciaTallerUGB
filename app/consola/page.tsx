@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import QRCode from "qrcode";
 import {
@@ -60,6 +61,7 @@ const EMPTY_SNAPSHOT: TelemetrySnapshot = {
   },
   workshop: {
     revealActive: false,
+    panicActive: false,
     acceptingSubmissions: true,
     storageEngine: "sqlite",
   },
@@ -183,6 +185,7 @@ export default function ConsolaPage() {
 
   async function handleToggleWorkshopFlag(patch: {
     revealActive?: boolean;
+    panicActive?: boolean;
     acceptingSubmissions?: boolean;
   }) {
     setIsUpdatingWorkshop(true);
@@ -278,6 +281,30 @@ export default function ConsolaPage() {
             >
               <QrCode className="h-4 w-4" />
               <span>{ES_TEXTS.consola.qrButton}</span>
+            </button>
+
+            <button
+              type="button"
+              disabled={isUpdatingWorkshop}
+              onClick={() =>
+                void handleToggleWorkshopFlag(
+                  workshop.panicActive
+                    ? { panicActive: false }
+                    : { panicActive: true, revealActive: true }
+                )
+              }
+              className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 font-mono text-xs font-bold transition ${
+                workshop.panicActive
+                  ? "border-rose-400 bg-rose-600/30 text-rose-200 hover:bg-rose-600/40"
+                  : "border-rose-500/70 bg-rose-600 text-white shadow-[0_0_20px_rgba(244,63,94,0.35)] hover:bg-rose-500"
+              }`}
+            >
+              <ShieldAlert className="h-4 w-4" />
+              <span>
+                {workshop.panicActive
+                  ? ES_TEXTS.consola.panicActiveButton
+                  : ES_TEXTS.consola.panicInactiveButton}
+              </span>
             </button>
 
             <button
@@ -725,14 +752,23 @@ export default function ConsolaPage() {
                   </span>
                 </h2>
               </div>
-              <button
-                type="button"
-                onClick={() => setSelectedStudentId(null)}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-900 px-3 py-1.5 font-mono text-xs text-slate-300 hover:text-white"
-              >
-                <X className="h-4 w-4" />
-                {ES_TEXTS.consola.drawer.closeButton}
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                <Link
+                  href={`/dossier?id=${encodeURIComponent(selectedStudent.id)}`}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-cyan-500 px-3.5 py-1.5 font-mono text-xs font-bold text-slate-950 transition hover:bg-cyan-400"
+                >
+                  <FileSearch className="h-4 w-4" />
+                  {ES_TEXTS.consola.drawer.openDossierButton}
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setSelectedStudentId(null)}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-900 px-3 py-1.5 font-mono text-xs text-slate-300 hover:text-white"
+                >
+                  <X className="h-4 w-4" />
+                  {ES_TEXTS.consola.drawer.closeButton}
+                </button>
+              </div>
             </div>
 
             <div className="flex-1 space-y-5 overflow-y-auto p-6 text-xs">

@@ -41,12 +41,15 @@ export async function PATCH(request: Request) {
   try {
     const body = (await request.json()) as {
       revealActive?: unknown;
+      panicActive?: unknown;
       acceptingSubmissions?: unknown;
     };
 
     const nextState = updateWorkshopState({
       revealActive:
         typeof body.revealActive === "boolean" ? body.revealActive : undefined,
+      panicActive:
+        typeof body.panicActive === "boolean" ? body.panicActive : undefined,
       acceptingSubmissions:
         typeof body.acceptingSubmissions === "boolean"
           ? body.acceptingSubmissions

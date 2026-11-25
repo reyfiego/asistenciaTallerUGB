@@ -100,6 +100,7 @@ export interface TelemetryRecord {
 
 export interface WorkshopState {
   revealActive: boolean;
+  panicActive: boolean;
   acceptingSubmissions: boolean;
   storageEngine: "sqlite" | "json-fallback";
 }
@@ -164,6 +165,7 @@ declare global {
     | {
         accounts: StoredAccountRow[];
         revealActive: boolean;
+        panicActive: boolean;
         acceptingSubmissions: boolean;
       }
     | undefined;
@@ -222,6 +224,7 @@ function getSqliteDb(): SqliteDatabaseLike | null {
         payload_json TEXT NOT NULL
       );
       INSERT OR IGNORE INTO workshop_config (key, value) VALUES ('reveal_active', 'false');
+      INSERT OR IGNORE INTO workshop_config (key, value) VALUES ('panic_active', 'false');
       INSERT OR IGNORE INTO workshop_config (key, value) VALUES ('accepting_submissions', 'true');
     `);
 
@@ -244,11 +247,13 @@ function getFallbackState() {
       const raw = JSON.parse(fs.readFileSync(FALLBACK_JSON_PATH, "utf8")) as {
         accounts?: StoredAccountRow[];
         revealActive?: boolean;
+        panicActive?: boolean;
         acceptingSubmissions?: boolean;
       };
       globalThis.ocFallbackStore = {
         accounts: Array.isArray(raw.accounts) ? raw.accounts : [],
         revealActive: Boolean(raw.revealActive),
+        panicActive: Boolean(raw.panicActive),
         acceptingSubmissions:
           raw.acceptingSubmissions === undefined ? true : Boolean(raw.acceptingSubmissions),
       };
@@ -261,6 +266,7 @@ function getFallbackState() {
   globalThis.ocFallbackStore = {
     accounts: [],
     revealActive: false,
+    panicActive: false,
     acceptingSubmissions: true,
   };
   return globalThis.ocFallbackStore;
@@ -592,11 +598,15 @@ export function getWorkshopState(): WorkshopState {
     const revRow = db
       .prepare("SELECT value FROM workshop_config WHERE key = 'reveal_active'")
       .get();
+    const panicRow = db
+      .prepare("SELECT value FROM workshop_config WHERE key = 'panic_active'")
+      .get();
     const accRow = db
       .prepare("SELECT value FROM workshop_config WHERE key = 'accepting_submissions'")
       .get();
     return {
       revealActive: revRow?.value === "true",
+      panicActive: panicRow?.value === "true",
       acceptingSubmissions: accRow?.value !== "false",
       storageEngine: "sqlite",
     };
@@ -605,6 +615,7 @@ export function getWorkshopState(): WorkshopState {
   const fb = getFallbackState();
   return {
     revealActive: fb.revealActive,
+    panicActive: fb.panicActive,
     acceptingSubmissions: fb.acceptingSubmissions,
     storageEngine: "json-fallback",
   };
@@ -612,6 +623,7 @@ export function getWorkshopState(): WorkshopState {
 
 export function updateWorkshopState(patch: {
   revealActive?: boolean;
+  panicActive?: boolean;
   acceptingSubmissions?: boolean;
 }): WorkshopState {
   const db = getSqliteDb();
@@ -622,6 +634,9 @@ export function updateWorkshopState(patch: {
     if (typeof patch.revealActive === "boolean") {
       stmt.run("reveal_active", patch.revealActive ? "true" : "false");
     }
+    if (typeof patch.panicActive === "boolean") {
+      stmt.run("panic_active", patch.panicActive ? "true" : "false");
+    }
     if (typeof patch.acceptingSubmissions === "boolean") {
       stmt.run("accepting_submissions", patch.acceptingSubmissions ? "true" : "false");
     }
@@ -631,6 +646,9 @@ export function updateWorkshopState(patch: {
   const fb = getFallbackState();
   if (typeof patch.revealActive === "boolean") {
     fb.revealActive = patch.revealActive;
+  }
+  if (typeof patch.panicActive === "boolean") {
+    fb.panicActive = patch.panicActive;
   }
   if (typeof patch.acceptingSubmissions === "boolean") {
     fb.acceptingSubmissions = patch.acceptingSubmissions;
@@ -974,13 +992,16 @@ export function getOrUpdateParticipantSession(
 export function clearTelemetryRecords(): TelemetrySnapshot {
   const db = getSqliteDb();
   if (db) {
-    db.exec("DELETE FROM participants; UPDATE workshop_config SET value = 'false' WHERE key = 'reveal_active';");
+    db.exec(
+      "DELETE FROM participants; UPDATE workshop_config SET value = 'false' WHERE key IN ('reveal_active', 'panic_active');"
+    );
     return getTelemetrySnapshot();
   }
 
   const fb = getFallbackState();
   fb.accounts = [];
   fb.revealActive = false;
+  fb.panicActive = false;
   persistFallbackState();
   return getTelemetrySnapshot();
 }

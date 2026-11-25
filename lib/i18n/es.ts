@@ -236,6 +236,8 @@ export const ES_TEXTS = {
     qrButton: "Proyectar QR",
     revealInactiveButton: "Detonar Revelación en Celulares",
     revealActiveButton: "Revelación Activa (Ocultar)",
+    panicActiveButton: "Desactivar Modo Pánico",
+    panicInactiveButton: "Modo Pánico (6s + Revelar)",
     submissionsOpenLabel: "Registro Abierto",
     submissionsClosedLabel: "Registro Cerrado",
     privacyBlurOn: "Censura: ON",
@@ -282,6 +284,7 @@ export const ES_TEXTS = {
     },
     drawer: {
       title: "Expediente Completo del Participante",
+      openDossierButton: "Analizar en Dossier OSINT",
       closeButton: "Cerrar",
       identitySection: "Cuenta, Términos y Contraseña",
       deviceSection: "Hardware, Pantalla y Red Móvil",
@@ -370,6 +373,26 @@ export const ES_TEXTS = {
       resetButton: "Reiniciar secuencia",
       attackerLabel: "Vector utilizado:",
       impactLabel: "Impacto:",
+    },
+    liveSelector: {
+      targetLabel: "Participante objetivo (registros en vivo)",
+      demoFallbackOption: "Perfil Señuelo (Demo offline — Valeria Mendoza)",
+      handleInputLabel: "@usuario a rastrear",
+      emailInputLabel: "Correo a investigar",
+      scanButton: "Ejecutar OSINT en vivo",
+      scanningButton: "Escaneando...",
+      refreshButton: "Actualizar lista",
+    },
+    liveLabels: {
+      realEmail: "Correo registrado",
+      ispNetwork: "Operadora / Red",
+      passwordAudit: "Auditoría de contraseña",
+      hardwareGpu: "GPU / Batería",
+      telemetryAndExifTitle: "02 // Comportamiento, EXIF y Ubicación Real",
+      osintResultsTitle: "03 // Rastreo OSINT en Vivo",
+      readyToScanTitle: "Listo para escanear huella pública en tiempo real",
+      readyToScanBody:
+        "Pulsa 'Ejecutar OSINT en vivo' para consultar plataformas públicas con este @usuario y verificar Gravatar / GitHub / brechas asociadas al correo.",
     },
   },
 } as const;

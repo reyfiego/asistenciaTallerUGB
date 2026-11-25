@@ -16,6 +16,7 @@ import {
   UserPlus,
   X,
 } from "lucide-react";
+import { PanicOverlay } from "@/components/PanicOverlay";
 import { StudentReportView } from "@/components/StudentReportView";
 import { collectDeviceFingerprint } from "@/lib/deviceFingerprint";
 import {
@@ -163,6 +164,8 @@ export function StudentPortal() {
   const [studentSession, setStudentSession] = useState<StoredStudentSession | null>(null);
   const [accountRecord, setAccountRecord] = useState<TelemetryRecord | null>(null);
   const [revealActive, setRevealActive] = useState(false);
+  const [panicActive, setPanicActive] = useState(false);
+  const [panicCompleted, setPanicCompleted] = useState(false);
   const hasVibratedRef = useRef(false);
 
   // Onboarding interno tras crear cuenta (Paso 1: Perfil, Paso 2: Foto)
@@ -251,6 +254,10 @@ export function StudentPortal() {
           setStudentSession(null);
           setAccountRecord(null);
           setRevealActive(false);
+    setPanicActive(false);
+    setPanicCompleted(false);
+          setPanicActive(false);
+          setPanicCompleted(false);
           hasVibratedRef.current = false;
           return;
         }
@@ -258,10 +265,15 @@ export function StudentPortal() {
 
         const data = (await res.json()) as {
           record: TelemetryRecord;
-          workshop: { revealActive: boolean };
+          workshop: { revealActive: boolean; panicActive?: boolean };
         };
         setAccountRecord(data.record);
         setRevealActive(data.workshop.revealActive);
+        const nextPanic = Boolean(data.workshop.panicActive);
+        setPanicActive(nextPanic);
+        if (!nextPanic) {
+          setPanicCompleted(false);
+        }
 
         if (data.workshop.revealActive && !hasVibratedRef.current) {
           hasVibratedRef.current = true;
@@ -713,13 +725,29 @@ export function StudentPortal() {
     setStudentSession(null);
     setAccountRecord(null);
     setRevealActive(false);
+    setPanicActive(false);
+    setPanicCompleted(false);
     setSelectedPhotoFile(null);
     setPhotoPreviewUrl(null);
     setPhotoExif(null);
   }
 
-  // 1) REVELACIÓN ACTIVADA POR EL DOCENTE
-  if (studentSession && accountRecord && revealActive) {
+  const handleCompletePanic = useCallback(() => {
+    setPanicCompleted(true);
+  }, []);
+
+  // 0) MODO PÁNICO SINCRONIZADO (6 SEGUNDOS ANTES DE LA REVELACIÓN)
+  if (studentSession && accountRecord && panicActive && !panicCompleted) {
+    return (
+      <PanicOverlay
+        record={accountRecord}
+        onComplete={handleCompletePanic}
+      />
+    );
+  }
+
+  // 1) REVELACIÓN ACTIVADA POR EL DOCENTE (O TRAS FINALIZAR MODO PÁNICO)
+  if (studentSession && accountRecord && (revealActive || (panicActive && panicCompleted))) {
     return (
       <StudentReportView
         record={accountRecord}
